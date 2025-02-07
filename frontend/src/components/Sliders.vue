@@ -58,7 +58,8 @@ export default {
   setup(props, context) {
     const usedLang = usedLanguage();
     const dataStore = useDataStore();
-    const url = "http://127.0.0.1:8000/api/save-slider-data/";
+    const url =
+      "https://energie-systems-planning-v2.onrender.com/api/save-slider-data/";
     const scenarioStore = useScenarioStore();
 
     let moveOutline = inject("moveOutline");
@@ -76,13 +77,14 @@ export default {
       });
       try {
         const data = {
-          nodes: scenarioStore.nodes, 
+          nodes: scenarioStore.nodes,
           edges: scenarioStore.edges,
-          sliderData:{
-          reset: reset,
-          autoSimulate: autoSimulate, // Send the boolean flag for auto simulation
-          prodCapacities: Array.from(dataStore.prodCapacities),
-        }};
+          sliderData: {
+            reset: reset,
+            autoSimulate: autoSimulate, // Send the boolean flag for auto simulation
+            prodCapacities: Array.from(dataStore.prodCapacities),
+          },
+        };
 
         const response = await axios
           .post(url, data, {

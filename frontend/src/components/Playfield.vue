@@ -3,23 +3,44 @@
     <!-- Image Box -->
 
     <!-- Vue Flow Container -->
-    <div id="vueflow_container" ref="vueFlowContainer" :style="{
-      backgroundImage: 'url(' + imgUrl + ')',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-    }" style="
+    <div
+      id="vueflow_container"
+      ref="vueFlowContainer"
+      :style="{
+        backgroundImage: 'url(' + imgUrl + ')',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }"
+      style="
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 72.5%;
         z-index: 2;
-      ">
-      <vue-flow v-model:nodes="nodes" v-model:edges="edges" :fit-view="true" :zoomOnScroll="false" :zoomOnPinch="false"
-        :panOnDrag="false" :pan-on-scroll="false" :preventScrolling="true" :snap-grid="snapGrid" :snap-to-grid="true"
-        :coordinateExtent="coordinateExtent" :connection-mode="connectionMode" :node-types="customNodeTypes"
-        :auto-pan-on-node-drag="false" :nodes-draggable="!locked" :edges-connectable="edgeMode"
-        :autoPanOnConnect="false" :zoomOnDoubleClick="false" @connect="onConnect" />
+      "
+    >
+      <vue-flow
+        v-model:nodes="nodes"
+        v-model:edges="edges"
+        :fit-view="true"
+        :zoomOnScroll="false"
+        :zoomOnPinch="false"
+        :panOnDrag="false"
+        :pan-on-scroll="false"
+        :preventScrolling="true"
+        :snap-grid="snapGrid"
+        :snap-to-grid="true"
+        :coordinateExtent="coordinateExtent"
+        :connection-mode="connectionMode"
+        :node-types="customNodeTypes"
+        :auto-pan-on-node-drag="false"
+        :nodes-draggable="!locked"
+        :edges-connectable="edgeMode"
+        :autoPanOnConnect="false"
+        :zoomOnDoubleClick="false"
+        @connect="onConnect"
+      />
     </div>
 
     <canvas v-if="showGrid" ref="gridCanvas" id="grid_overlay"></canvas>
@@ -30,39 +51,111 @@
 
       <!-- Scenario Management -->
       <div class="row">
-        <Select v-model="selectedScenario" :options="scenarios" class="Sbutton" placeholder="Choose Scenario"></Select>
-        <Button @click="loadRequest" type="submit" class="button" v-bind:label="usedLang.load_scenario"></Button>
-        <Button @click="triggerJsonUpload" type="submit" class="slider-button" v-bind:label="upload_json">json</Button>
-        <Button @click="triggerImageUpload" type="submit" class="button"
-          v-bind:label="usedLang.upload_scenario">img</Button>
+        <Select
+          v-model="selectedScenario"
+          :options="scenarios"
+          class="Sbutton"
+          placeholder="Choose Scenario"
+        ></Select>
+        <Button
+          @click="loadRequest"
+          type="submit"
+          class="button"
+          v-bind:label="usedLang.load_scenario"
+        ></Button>
+        <Button
+          @click="triggerJsonUpload"
+          type="submit"
+          class="slider-button"
+          v-bind:label="upload_json"
+          >json</Button
+        >
+        <Button
+          @click="triggerImageUpload"
+          type="submit"
+          class="button"
+          v-bind:label="usedLang.upload_scenario"
+          >img</Button
+        >
 
-        <Button @click="toggleGridOverlay" type="submit" class="button" v-bind:label="usedLang.toggle_grid"></Button>
-        <Button @click="clearNodes" type="submit" class="button" v-bind:label="usedLang.clear_nodes"></Button>
-        <Button @click="saveData" type="submit" class="button" v-bind:label="usedLang.save_text"></Button>
+        <Button
+          @click="toggleGridOverlay"
+          type="submit"
+          class="button"
+          v-bind:label="usedLang.toggle_grid"
+        ></Button>
+        <Button
+          @click="clearNodes"
+          type="submit"
+          class="button"
+          v-bind:label="usedLang.clear_nodes"
+        ></Button>
+        <Button
+          @click="saveData"
+          type="submit"
+          class="button"
+          v-bind:label="usedLang.save_text"
+        ></Button>
       </div>
       <!-- Utilities -->
       <div class="row">
-        <Button @click="toggleEdgeMode" type="submit" class="button" v-bind:label="usedLang.add_edge"></Button>
+        <Button
+          @click="toggleEdgeMode"
+          type="submit"
+          class="button"
+          v-bind:label="usedLang.add_edge"
+        ></Button>
 
-        <Button @click="addConsumerNode" type="submit" class="button" v-bind:label="usedLang.add_consumer"></Button>
-        <Button @click="addBatteryNode" type="submit" class="button">Add Battery</Button>
-        <Button @click="addJunctionNode" type="submit" class="button">Add Junction</Button>
-        <Button @click="addEnergySourceNode" type="submit" class="button"
-          v-bind:label="usedLang.add_energy_source"></Button>
+        <Button
+          @click="addConsumerNode"
+          type="submit"
+          class="button"
+          v-bind:label="usedLang.add_consumer"
+        ></Button>
+        <Button @click="addBatteryNode" type="submit" class="button"
+          >Add Battery</Button
+        >
+        <Button @click="addJunctionNode" type="submit" class="button"
+          >Add Junction</Button
+        >
+        <Button
+          @click="addEnergySourceNode"
+          type="submit"
+          class="button"
+          v-bind:label="usedLang.add_energy_source"
+        ></Button>
       </div>
       <!-- Actions -->
 
       <div class="row">
-        <Select v-model="selectedConsumer" :options="optionsConsumer"
-          :placeholder="usedLang.selector_text_consumer"></Select>
-        <Select v-model="selectedProducer" :options="optionsProducers"
-          :placeholder="usedLang.selector_text_producer"></Select>
+        <Select
+          v-model="selectedConsumer"
+          :options="optionsConsumer"
+          :placeholder="usedLang.selector_text_consumer"
+        ></Select>
+        <Select
+          v-model="selectedProducer"
+          :options="optionsProducers"
+          :placeholder="usedLang.selector_text_producer"
+        ></Select>
       </div>
     </div>
-    <input type="file" id="imageInput" ref="imageInput" @change="handleFileChange('image', $event)" accept="image/*"
-      style="display: none" />
-    <input type="file" id="jsonInput" ref="jsonInput" @change="handleFileChange('json', $event)" accept=".json"
-      style="display: none" />
+    <input
+      type="file"
+      id="imageInput"
+      ref="imageInput"
+      @change="handleFileChange('image', $event)"
+      accept="image/*"
+      style="display: none"
+    />
+    <input
+      type="file"
+      id="jsonInput"
+      ref="jsonInput"
+      @change="handleFileChange('json', $event)"
+      accept=".json"
+      style="display: none"
+    />
   </Panel>
 </template>
 
@@ -80,7 +173,6 @@ import ProducerNode from "./customNodes/Producer.vue";
 import { usedLanguage } from "../assets/stores/pageSettings";
 import { inject, ref, reactive, watch } from "vue";
 import { getNodeData } from "@/utils/nodeUtils.js";
-
 
 export default {
   components: {
@@ -162,7 +254,8 @@ export default {
 
     async loadRequest() {
       try {
-        const url = "http://127.0.0.1:8000/api/process-scenario/";
+        const url =
+          "https://energie-systems-planning-v2.onrender.com/api/process-scenario/";
         let id = null;
         if (this.selectedScenario == "Scene 1") {
           id = 1;
@@ -271,8 +364,7 @@ export default {
         id: `node_${this.nodeIdCounter++}`,
         type: "battery",
         position: { x: width * 5, y: height * 3 },
-        data: nodeData
-
+        data: nodeData,
       };
       this.nodes.push(newNode);
     },
@@ -290,11 +382,10 @@ export default {
         id: `node_${this.nodeIdCounter++}`,
         type: "junction",
         position: { x: width * 7, y: height * 3 },
-        data: nodeData
+        data: nodeData,
       };
       this.nodes.push(newNode);
     },
-
 
     addEnergySourceNode() {
       const vueFlowContainer = this.$refs.vueFlowContainer;
@@ -313,7 +404,6 @@ export default {
         return;
       }
 
-
       const newNode = {
         id: `node_${this.nodeIdCounter++}`,
         type: "producer",
@@ -322,8 +412,6 @@ export default {
         targetPosition: "left",
         sourcePosition: "right",
       };
-
-
 
       this.nodes.push(newNode);
     },
@@ -353,8 +441,6 @@ export default {
         data: nodeData,
       };
 
-
-
       this.nodes.push(newNode);
     },
 
@@ -374,7 +460,6 @@ export default {
       this.edges = [];
     },
 
-
     onConnect(connection) {
       if (this.edgeMode) {
         const newEdge = {
@@ -393,97 +478,85 @@ export default {
     },
 
     saveData() {
-  try {
-   
-    const nodesConnected = this.depthFirstSearch();
-    if (!nodesConnected) {
-      alert("Error: Graph is not fully connected");
-      return;
-    }
+      try {
+        const nodesConnected = this.depthFirstSearch();
+        if (!nodesConnected) {
+          alert("Error: Graph is not fully connected");
+          return;
+        }
 
-    
-    const producerAndBatteryCount = this.countProducersAndBatteries();
-    if (producerAndBatteryCount > 5) {
-      alert("Error: The total number of producers and batteries cannot exceed 5.");
-      return;
-    }
+        const producerAndBatteryCount = this.countProducersAndBatteries();
+        if (producerAndBatteryCount > 5) {
+          alert(
+            "Error: The total number of producers and batteries cannot exceed 5."
+          );
+          return;
+        }
 
-    
-    const dataToSave = {
-      nodes: this.nodes.map((node) => ({
-        id: node.id,
-        position: node.position,
-        type: node.type,
-        label: node.data.label,
-      })),
-      edges: this.edges.map((edge) => ({
-        id: edge.id,
-        source: edge.source,
-        target: edge.target,
-        
-        sourceHandle: edge.sourceHandle,
-        targetHandle: edge.targetHandle,
-      })),
-    };
+        const dataToSave = {
+          nodes: this.nodes.map((node) => ({
+            id: node.id,
+            position: node.position,
+            type: node.type,
+            label: node.data.label,
+          })),
+          edges: this.edges.map((edge) => ({
+            id: edge.id,
+            source: edge.source,
+            target: edge.target,
 
-   
-    const jsonString = JSON.stringify(dataToSave);
+            sourceHandle: edge.sourceHandle,
+            targetHandle: edge.targetHandle,
+          })),
+        };
 
-    
-    const jsonBlob = new Blob([jsonString], { type: "application/json" });
-    const jsonLink = document.createElement("a");
-    jsonLink.href = URL.createObjectURL(jsonBlob);
-    jsonLink.download = "scenario_graph.json";
-    jsonLink.click();
+        const jsonString = JSON.stringify(dataToSave);
 
-  } catch (error) {
-    console.error("Error saving data:", error);
-    alert(`Error: ${error.message}`);
-  }
-},
-
-
-depthFirstSearch() {
-  const visited = new Set();
-  
-  
-  const dfs = (nodeId) => {
-    if (visited.has(nodeId)) return;
-    visited.add(nodeId);
-
-  
-    this.edges.forEach((edge) => {
-      if (edge.source === nodeId && !visited.has(edge.target)) {
-        dfs(edge.target);
-      } else if (edge.target === nodeId && !visited.has(edge.source)) {
-        dfs(edge.source);
+        const jsonBlob = new Blob([jsonString], { type: "application/json" });
+        const jsonLink = document.createElement("a");
+        jsonLink.href = URL.createObjectURL(jsonBlob);
+        jsonLink.download = "scenario_graph.json";
+        jsonLink.click();
+      } catch (error) {
+        console.error("Error saving data:", error);
+        alert(`Error: ${error.message}`);
       }
-    });
-  };
+    },
 
- 
-  if (this.nodes.length > 0) {
-    dfs(this.nodes[0].id);
-  }
+    depthFirstSearch() {
+      const visited = new Set();
 
-  
-  return this.nodes.every((node) => visited.has(node.id));
-},
+      const dfs = (nodeId) => {
+        if (visited.has(nodeId)) return;
+        visited.add(nodeId);
 
+        this.edges.forEach((edge) => {
+          if (edge.source === nodeId && !visited.has(edge.target)) {
+            dfs(edge.target);
+          } else if (edge.target === nodeId && !visited.has(edge.source)) {
+            dfs(edge.source);
+          }
+        });
+      };
 
-countProducersAndBatteries() {
-  let count = 0;
+      if (this.nodes.length > 0) {
+        dfs(this.nodes[0].id);
+      }
 
-  this.nodes.forEach((node) => {
-    if (node.type === "producer" || node.type === "battery") {
-      count++;
-    }
-  });
+      return this.nodes.every((node) => visited.has(node.id));
+    },
 
-  return count;
-},
+    countProducersAndBatteries() {
+      let count = 0;
 
+      this.nodes.forEach((node) => {
+        if (node.type === "producer" || node.type === "battery") {
+          count++;
+        }
+      });
 
+      return count;
+    },
 
     triggerImageUpload() {
       this.$refs.imageInput.click(); // Trigger image upload
@@ -536,7 +609,6 @@ countProducersAndBatteries() {
               ...node,
               data: getNodeData(node.label),
             };
-
 
             return newNode;
           });
