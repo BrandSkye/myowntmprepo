@@ -12,4 +12,10 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  server: {
+    historyApiFallback: true, // Ensures routing works in dev mode
+  },
+  build: {
+    outDir: "dist", // Ensure correct output folder for Render
+  },
 });
