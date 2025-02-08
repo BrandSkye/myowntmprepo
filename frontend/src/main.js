@@ -18,7 +18,7 @@ const router = createRouter({
   routes: [
     { path: "/", component: Home }, //route to main page
     {
-      path: "/scenario",
+      path: "https://myowntmprepo.onrender.com/scenario",
       component: ScenarioCreator, //route to password protected scenario creator
       beforeEnter: (to, from, next) => {
         const userPassword = prompt("Enter the password:");
